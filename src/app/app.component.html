@@ -4,6 +4,7 @@
      fxLayoutAlign="center"
      fxLayoutGap="10px"
      fxLayoutGap.xs="0">
+  <!--Form component-->
   <div class="form-container" fxFlex="30%" >
     <form #findForm="ngForm">
         <div class="d-flex flex-row" >
@@ -20,8 +21,9 @@
         </div>
     </form>
   </div>
+  <!-- Weather display component -->
   <div class="item" fxFlex="70%">
-    <div *ngIf="city != null && weatherInfo != null" >
+    <div *ngIf="city != null && weatherInfo != null && !searching" >
         <i class="fas fa-star" style="color: #fdd703;" *ngIf="addedToFav"></i>{{city.title}}, {{parentName}}
         <br/>
         <a class="link" [routerLink]="" *ngIf="!addedToFav" (click)="addToFavorite()">Add to favorite</a>
@@ -36,8 +38,8 @@
             {{weather}}ºC
           </div>
           <div  fxFlex="50%" >
-              <sc-skycons [weather]="weatherName" [color]="iconColor"></sc-skycons>
-            </div>
+            <img style="margin-top: 10px;" src="/assets/images/{{weatherIcon}}.gif" title="{{weatherName}}"/>
+          </div>
         </div>
 
         <div class="inner-container"
@@ -56,15 +58,16 @@
             Wind speed: {{windSpeed}} mph
           </div>
     </div>
-    <div *ngIf="city == null" >
-        Choose location
+    <!-- No location selected or not found component-->
+    <div *ngIf="city == null && !searching" >
+        &#160;
         <mat-divider></mat-divider>
         <div class="inner-container"
           fxLayout
           fxLayoutAlign="center"
           fxLayoutGap="10px"
           fxLayoutGap.xs="0" style="text-align: center;">
-            <sc-skycons [weather]="'clear day'" [color]="'#9360e2'"></sc-skycons>
+            <img src="/assets/images/windy.gif" />
         </div>
 
         <div class="inner-container"
@@ -73,8 +76,30 @@
           fxLayoutGap="10px"
           fxLayoutGap.xs="0" style="text-align: center;">
             <p *ngIf="noLocationFound">Location not found</p>
+            <p *ngIf="!noLocationFound">Choose location</p>
         </div>
     </div>
+    <!-- Loading component-->
+    <div *ngIf="searching">
+      &#160;
+      <mat-divider></mat-divider>
+      <div class="inner-container"
+        fxLayout
+        fxLayoutAlign="center"
+        fxLayoutGap="10px"
+        fxLayoutGap.xs="0" style="text-align: center;">
+          <img style="margin-top: 10px;" src="/assets/images/searching.gif" />
+      </div>
+
+      <div class="inner-container"
+        fxLayout
+        fxLayoutAlign="center"
+        fxLayoutGap="10px"
+        fxLayoutGap.xs="0" style="text-align: center;">
+          <p>Looking up weather...</p>
+      </div>
+    </div>
+    <!-- Favorites component-->
     <div style="margin-top: 15px;">
         Favorites
         <mat-divider></mat-divider>
